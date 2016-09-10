@@ -1,5 +1,11 @@
 # 安装
 
+安装 `ws` 模块:
+
+```sh
+$ npm install ws
+```
+
 `server.js` 上传到服务器,执行方式:
 
 ```sh
