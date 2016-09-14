@@ -13,31 +13,30 @@ var remote_options={
 net.createServer(function(sock) {
 	var ws = new WebSocket(SERVER);
 	var jump=null;
-    ws.on('open', function() {
-        ws.send('WebSocket Proxy:'+JSON.stringify(remote_options));
+  ws.on('open', function() {
+    ws.send('WebSocket Proxy:'+JSON.stringify(remote_options));
 		jump=setInterval(function() {
-           ws.send('--jump');
-        }, 500);
-    });
-    ws.on('message', function(data, flags) {
-      sock.write(data);
+         ws.send('--jump');
+      }, 500);
+  });
+  ws.on('message', function(data, flags) {
+    sock.write(data);
 	  console.log('websocket: '+data+"\n");
-
-    });
+  });
 	ws.on('close', function() {
 	  clearInterval(jump);
 	  sock.destroy();
-      console.log('websocket closed\n');
+    console.log('websocket closed\n');
 	});
 
-    sock.on('data', function(data) {
-      ws.send(data,{ binary: true});
-      console.log('socket: ' + data+"\n");
-    });
+  sock.on('data', function(data) {
+    if(ws.readyState==WebSocket.OPEN)ws.send(data,{ binary: true});
+    console.log('socket: ' + data+"\n");
+  });
 
-    sock.on('close', function(data) {
-	  ws.close();
-      console.log('CLOSED: ' +sock.remoteAddress + ' ' + sock.remotePort);
-    });
+  sock.on('close', function(data) {
+  ws.close();
+    console.log('CLOSED: ' +sock.remoteAddress + ' ' + sock.remotePort);
+  });
 
 }).listen(PORT, HOST);
