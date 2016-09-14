@@ -1,3 +1,7 @@
+# 原理
+
+![原理](1.png)
+
 # 安装
 
 安装 `ws` 模块:
@@ -14,7 +18,18 @@ $ node server.js
 
 然后配置nginx
 
-# Nginx配置端口转发
+# Web Server配置
+
+### Apache配置端口转发
+
+```
+<VirtualHost *:80>
+  ServerName xxx.com
+  ProxyPass / ws://127.0.0.1:8001
+</VirtualHost>
+```
+
+### Nginx配置端口转发
 
 ```
 map $http_upgrade $connection_upgrade {
